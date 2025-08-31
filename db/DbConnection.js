@@ -30,16 +30,17 @@ export const createHabit = async (db, {habitName,habitGoal}) =>{
   const result = await getIdOfHabitByName(db,{habitName});
   if(!habitName || !habitGoal){
     console.log('All data is necesary');
-    return;
+    return 0;
   }
   if(result==null){
     await db.runAsync("INSERT INTO habits(name,goal) VALUES(?,?)",
         [habitName,habitGoal]
       );
       console.log('Added habit');
-      return;
+      return 0;
   }
   console.log('There is another habit with the same name');
+  return null;
 };
 
 export const getAllHabits = async(db) =>{
