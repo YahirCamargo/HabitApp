@@ -1,8 +1,16 @@
+import { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSQLiteContext } from "expo-sqlite";
 
-import {Entypo,Feather} from 'react-native-vector-icons'
+import {Entypo,Feather} from 'react-native-vector-icons';
+import { 
+  createTables, 
+  getAllHabits, 
+  checkIfCompletionExists, 
+  insertHabitToComplete 
+} from '../db/DbConnection.js';
 
 import CreateHabitScreen from '../src/CreateHabitScreen.js';
 import HomeScreen from '../src/HomeScreen.js';
@@ -61,6 +69,20 @@ function MainStack() {
 }
 
 export default function Navigation() {
+  const [ready, setReady] = useState(false);
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    const setupDb = async () => {
+      await createTables(db);
+
+      setReady(true);
+    };
+    setupDb();
+  }, [db]);
+
+  if (!ready) return <SplashScreen />;
+
   return (
     <NavigationContainer>
       <MainStack/>

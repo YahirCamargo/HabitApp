@@ -1,11 +1,10 @@
 import Navigation from "./navigation/Navigation.js"
-import {createTables} from './db/DbConnection.js'
-import { Children } from "react";
+import { SQLiteProvider } from "expo-sqlite";
 
 export default function App() {
   return (
-      createTables({
-        children:<Navigation />
-      })
+    <SQLiteProvider databaseName="userDatabase.db">
+      <Navigation />
+    </SQLiteProvider>
   );
 };
